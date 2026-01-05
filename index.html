@@ -2,6 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Skull King - Recuento</title>
     <script src="https://cdn.tailwindcss.com"></script>
 
@@ -169,7 +170,7 @@
                 transform: scale(0.8);
             }
             100% {
-                opacity: 0;
+                opacity: 0;pantalla 
             }
         }
     </style>
@@ -183,7 +184,15 @@
         </button>
 
         <h1 class="text-3xl font-extrabold text-yellow-400 tracking-wide text-center flex-grow"> ☠️ Marcador SkullKing ☠️ </h1>
+
+	<button id="btn-salir-header"
+        	onclick="reiniciarJuego()"
+	        class="hidden p-2 rounded-full bg-red-600 hover:bg-red-700 text-white shadow-lg text-2xl"
+	        aria-label="Salir del juego">
+    	🚪
+	</button>
         
+
         <div class="w-10 h-10"></div> 
     </header>
 
@@ -201,10 +210,26 @@
             </div>
 
             <div class="bg-gray-200 bg-opacity-80 text-black rounded-xl p-6 shadow-lg w-full max-w-md">
-                <label class="block mb-2">Nombre del pirata:</label>
-                <input id="nombrePirata" type="text" class="p-2 rounded text-black mb-3 w-full" placeholder="Ej: Barbanegra">
-                <button onclick="agregarPirata()" class="px-4 py-2 bg-green-600 rounded text-white w-full">Agregar pirata</button>
-            </div>
+    <label class="block mb-2">Nombre del pirata:</label>
+
+    <div class="flex gap-2 items-center">
+        <input id="nombrePirata"
+               type="text"
+               class="flex-1 p-2 rounded text-black"
+               placeholder="Ej: Barbanegra"
+               onkeydown="if(event.key === 'Enter') agregarPirata()">
+
+        <button onclick="agregarPirata()"
+        class="h-10 w-10 rounded border border-green-600
+               bg-green-500 text-white text-xl font-bold
+               hover:bg-green-600 active:bg-green-700"
+        aria-label="Agregar pirata">
+    +
+</button>
+
+    </div>
+</div>
+
 
             <div class="bg-gray-200 bg-opacity-80 text-black rounded-xl p-6 shadow-lg w-full max-w-md">
                 <h2 class="text-xl font-bold mb-2">⚓ Piratas</h2>
@@ -215,12 +240,27 @@
         </div>
 
         <div id="pantalla-juego" class="hidden flex flex-col items-center gap-6 w-full">
-            <div class="bg-gray-200 bg-opacity-80 text-black rounded-xl p-4 shadow-lg w-full max-w-md flex justify-between items-center">
-                <span class="font-bold text-xl">Ronda: <span id="ronda-actual">1</span> / 10 </span>
-                <span id="puntos-potenciales" class="font-semibold text-lg text-purple-700 hidden">Puntos potenciales: <span id="ppuntos">10</span>
-                </span>
-            </div>
+            <div class="bg-gray-200 bg-opacity-80 text-black rounded-xl p-4 shadow-lg w-full max-w-md">
 
+    <div class="flex justify-between items-center">
+        <span class="font-bold text-xl">
+            Ronda: <span id="ronda-actual">1</span> / 10
+        </span>
+
+        <span id="puntos-potenciales"
+              class="font-semibold text-lg text-purple-700 hidden">
+            Puntos potenciales: <span id="ppuntos">10</span>
+        </span>
+    </div>
+
+    <!-- PIRATA DOMINANTE VA AQUÍ -->
+    <div id="lider-actual"
+         class="text-sm text-yellow-700 text-center mt-1 hidden">
+    </div>
+
+</div>
+
+		
             <div id="contenedorPiratas" class="flex flex-wrap justify-center gap-6 w-full max-w-5xl"></div>
 
             <div class="flex gap-4 mt-6 items-center justify-center w-full"> 
@@ -239,18 +279,17 @@
                 <button id="btn-siguiente" onclick="siguienteRonda()" class="px-4 py-2 bg-blue-600 rounded text-white hidden">Siguiente Ronda</button>
             </div>
 
-            <button id="btn-salir" onclick="reiniciarJuego()" class="px-6 py-3 bg-red-600 rounded text-white mt-4">Salir</button>
-
-            <div id="ranking-parcial" class="bg-gray-200 bg-opacity-80 text-black rounded-xl p-4 shadow-lg mt-6 w-full max-w-md hidden">
-                <h3 class="text-lg font-bold mb-2 text-center">📊 Posiciones actuales</h3>
+            <div id="ranking-parcial" class="bg-gray-200 bg-opacity-80 text-black rounded-xl p-4 shadow-lg mt-6 w-full max-w-sm hidden">
+                <h3 class="text-lg font-bold mb-2 text-center">🧭 Posiciones actuales</h3>
                 <table class="w-full text-black border-collapse">
                     <thead>
-                        <tr class="border-b border-gray-400">
-                            <th class="px-2 py-1 text-left w-1/4">Lugar</th>
-                            <th class="px-2 py-1 text-left w-1/2">Pirata</th>
-                            <th class="px-2 py-1 text-right w-1/4">Puntos</th>
-                        </tr>
-                    </thead>
+    			<tr class="border-b border-gray-400 text-sm text-gray-700">
+        		<th class="px-2 py-1 text-center w-10">#</th>
+        		<th class="px-2 py-1 text-left">Pirata</th>
+        		<th class="px-2 py-1 text-right">Pts</th>
+    			</tr>
+		    </thead>
+
                     <tbody id="tablaParcial"></tbody>
                 </table>
             </div>
@@ -268,7 +307,6 @@
                 </thead>
                 <tbody id="tablaRanking"></tbody>
             </table>
-            <button onclick="reiniciarJuego()" class="px-6 py-3 bg-red-600 rounded text-white mt-4">Salir</button>
         </div>
     </div>
 
@@ -429,6 +467,7 @@
             }
 
             document.getElementById("pantalla-inicial").classList.add("hidden");
+	    document.getElementById("btn-salir-header").classList.remove("hidden");
 
             const transitionScreen = document.getElementById("transicion-zarpar");
             const shoutText = transitionScreen.querySelector('.shout-text');
@@ -476,78 +515,117 @@
                         <span class="font-bold text-xl text-gray-900">🏴‍☠️ ${p.nombre}</span>
                     </div>
                     <div class="flex items-center justify-between mb-3 border-b pb-2 border-gray-300">
-                        <span class="text-gray-900 font-semibold w-1/3">Apuesta:</span>
+                        <span class="text-gray-900 w-1/3">Apuesta:</span>
                         <div class="flex items-center gap-1 w-2/3 justify-end">
                             <input type="number" id="apuesta-${i}" value="${p.apuesta || 0}" readonly
                                 class="w-10 p-1 text-center rounded bg-transparent font-bold text-lg">
                             <button id="btn-apuesta-mas-${i}" onclick="sumarApuesta(${i})"
-                                class="px-2 py-1 text-white rounded bg-yellow-600 hover:bg-yellow-700 text-sm h-8 w-8 leading-none">+</button>
+                                class="px-2 py-1 text-white rounded bg-green-500 text-white text-xl font-bold
+               			       hover:bg-green-600 active:bg-green-700 text-sm h-8 w-8 leading-none">+</button>
                             <button id="btn-apuesta-menos-${i}" onclick="restarApuesta(${i})"
-                                class="px-2 py-1 text-white rounded bg-red-600 hover:bg-red-700 text-sm h-8 w-8 leading-none">-</button>
+                                class="px-2 py-1 text-white rounded bg-red-500 text-white text-xl font-bold
+				       hover:bg-red-600 active:bg-red-700 text-sm h-8 w-8 leading-none">-</button>
                         </div>
                     </div>
                     <div class="flex items-center justify-between mb-3 border-b pb-2 border-gray-300 ${disabledClass}">
-                        <span class="text-gray-900 font-semibold w-1/3">Ganados:</span>
+                        <span class="text-gray-900 w-1/3">Ganados:</span>
                         <div class="flex items-center gap-1 w-2/3 justify-end">
                             <input type="number" id="ganados-${i}" value="${p.ganados || 0}" readonly
                                 class="w-10 p-1 text-center rounded bg-transparent font-bold text-lg">
                             <button onclick="sumarGanado(${i})" 
-                                class="px-2 py-1 text-white rounded bg-green-600 hover:bg-green-700 text-sm h-8 w-8 leading-none"
-                                ${isDisabled ? 'disabled' : ''}>+</button>
+    				class="h-8 w-8 rounded border border-gray-300 bg-transparent
+           			text-gray-700 font-bold leading-none
+           			hover:border-gray-400 active:border-gray-500"
+    				${isDisabled ? 'disabled' : ''}>
+    				+
+			    </button>
+ 
                             <button onclick="restarGanado(${i})" 
-                                class="px-2 py-1 text-white rounded bg-red-600 hover:bg-red-700 text-sm h-8 w-8 leading-none"
-                                ${isDisabled ? 'disabled' : ''}>-</button>
+    				class="h-8 w-8 rounded border border-gray-300 bg-transparent
+           			text-gray-700 font-bold leading-none
+           			hover:border-gray-400 active:border-gray-500"
+    				${isDisabled ? 'disabled' : ''}>
+    				−
+			    </button>
+
                         </div>
                     </div>
 
-                    <span class="text-gray-900 font-semibold block mb-1">Bonificaciones:</span>
-                    <div class="flex gap-2 mb-3 justify-between ${disabledClass}">
-                        <button id="14-verde-${i}" data-color="verde" data-index="${i}" onclick="toggle14(this)" 
-                            class="w-10 h-10 rounded ${p.c14.verde ? 'opacity-100' : 'opacity-40'} bg-green-500 text-white font-bold text-xs flex items-center justify-center"
-                            ${isDisabled ? 'disabled' : ''}>14 V</button>
-                        <button id="14-amarillo-${i}" data-color="amarillo" data-index="${i}" onclick="toggle14(this)" 
-                            class="w-10 h-10 rounded ${p.c14.amarillo ? 'opacity-100' : 'opacity-40'} bg-yellow-400 text-black font-bold text-xs flex items-center justify-center"
-                            ${isDisabled ? 'disabled' : ''}>14 A</button>
-                        <button id="14-morado-${i}" data-color="morado" data-index="${i}" onclick="toggle14(this)" 
-                            class="w-10 h-10 rounded ${p.c14.morado ? 'opacity-100' : 'opacity-40'} bg-purple-600 text-white font-bold text-xs flex items-center justify-center"
-                            ${isDisabled ? 'disabled' : ''}>14 M</button>
-                        <button id="14-negro-${i}" data-color="negro" data-index="${i}" onclick="toggle14(this)" 
-                            class="w-10 h-10 rounded ${p.c14.negro ? 'opacity-100' : 'opacity-40'} bg-black text-white font-bold text-xs flex items-center justify-center"
-                            ${isDisabled ? 'disabled' : ''}>14 N</button>
-                    </div>
+		    <span class="text-gray-900 block mb-1">Bonificaciones (14):</span>
 
+		    <div class="flex justify-between mb-3 text-xl font-bold ${disabledClass}">
+    			<span id="14-verde-${i}" data-color="verde" data-index="${i}" onclick="toggle14(this)"
+		        class="cursor-pointer ${p.c14.verde ? 'opacity-100' : 'opacity-40'} text-green-600"
+		        ${isDisabled ? 'disabled' : ''}>
+		        14
+		    </span>
+
+		    <span id="14-amarillo-${i}" data-color="amarillo" data-index="${i}" onclick="toggle14(this)"
+		        class="cursor-pointer ${p.c14.amarillo ? 'opacity-100' : 'opacity-40'} text-yellow-500"
+		        ${isDisabled ? 'disabled' : ''}>
+		        14
+		    </span>
+
+		    <span id="14-morado-${i}" data-color="morado" data-index="${i}" onclick="toggle14(this)"
+		        class="cursor-pointer ${p.c14.morado ? 'opacity-100' : 'opacity-40'} text-purple-600"
+		        ${isDisabled ? 'disabled' : ''}>
+		        14
+		    </span>
+
+		    <span id="14-negro-${i}" data-color="negro" data-index="${i}" onclick="toggle14(this)"
+		        class="cursor-pointer ${p.c14.negro ? 'opacity-100' : 'opacity-40'} text-gray-900"
+		        ${isDisabled ? 'disabled' : ''}>
+		        14
+		    </span>
+		    </div>
+
+                    
                     <div class="flex flex-col gap-2">
                         <div class="flex items-center justify-between ${disabledClass}">
-                            <span class="text-gray-900 font-semibold">🧜 Sirena (+20):</span>
+                            <span class="text-gray-900">🧜 Sirena (+20):</span>
                             <div class="flex items-center gap-1">
                                 <input type="number" id="sirena-count-${i}" value="${p.sirenaCount}" readonly
                                     class="w-10 p-1 text-center rounded bg-transparent font-bold text-gray-900 text-lg">
-                                <button onclick="sumarPersonaje(${i}, 'sirena')" 
-                                    class="px-2 py-1 bg-blue-500 text-white rounded text-sm h-8 w-8 leading-none"
-                                    ${isDisabled ? 'disabled' : ''}>+</button>
-                                <button onclick="restarPersonaje(${i}, 'sirena')" 
-                                    class="px-2 py-1 bg-red-600 text-white rounded text-sm h-8 w-8 leading-none"
-                                    ${isDisabled ? 'disabled' : ''}>-</button>
+				    <button onclick="sumarPersonaje(${i}, 'sirena')" 
+				        class="h-8 w-8 rounded border border-gray-300 bg-transparent
+           				text-gray-700 font-bold leading-none
+                                        hover:border-gray-400 active:border-gray-500"
+    					${isDisabled ? 'disabled' : ''}>+</button>
+
+				    <button onclick="restarPersonaje(${i}, 'sirena')" 
+    					class="h-8 w-8 rounded border border-gray-300 bg-transparent
+           				text-gray-700 font-bold leading-none
+           				hover:border-gray-400 active:border-gray-500"
+    					${isDisabled ? 'disabled' : ''}>-</button>
+
                             </div>
                         </div>
                         <div class="flex items-center justify-between ${disabledClass}">
-                            <span class="text-gray-900 font-semibold">🏴‍☠️ Pirata (+30):</span>
+                            <span class="text-gray-900">🏴‍☠️ Pirata (+30):</span>
                             <div class="flex items-center gap-1">
                                 <input type="number" id="pirata-count-${i}" value="${p.pirataCount}" readonly
                                     class="w-10 p-1 text-center rounded bg-transparent font-bold text-gray-900 text-lg">
-                                <button onclick="sumarPersonaje(${i}, 'pirata')" 
-                                    class="px-2 py-1 bg-blue-500 text-white rounded text-sm h-8 w-8 leading-none"
-                                    ${isDisabled ? 'disabled' : ''}>+</button>
-                                <button onclick="restarPersonaje(${i}, 'pirata')" 
-                                    class="px-2 py-1 bg-red-600 text-white rounded text-sm h-8 w-8 leading-none"
-                                    ${isDisabled ? 'disabled' : ''}>-</button>
+				    <button onclick="sumarPersonaje(${i}, 'pirata')" 
+				    	class="h-8 w-8 rounded border border-gray-300 bg-transparent
+           				text-gray-700 font-bold leading-none
+           				hover:border-gray-400 active:border-gray-500"
+    				    	${isDisabled ? 'disabled' : ''}>+</button>
+
+				    <button onclick="restarPersonaje(${i}, 'pirata')" 
+			    		class="h-8 w-8 rounded border border-gray-300 bg-transparent
+           				text-gray-700 font-bold leading-none
+           				hover:border-gray-400 active:border-gray-500"
+    					${isDisabled ? 'disabled' : ''}>-</button>
+
                             </div>
                         </div>
                         <button id="skull-btn-${i}" onclick="toggleUnico(this, ${i})" 
-                            class="px-3 py-2 bg-purple-700 rounded text-white font-bold mt-2 ${p.skullSelected ? 'opacity-100' : 'opacity-60'} ${disabledClass}"
-                            ${isDisabled ? 'disabled' : ''}>
-                            ${p.skullSelected ? '💀 Skull King (+40) ✓' : '💀 Skull King (+40)'}
-                        </button>
+    				class="px-3 py-2 rounded border bg-transparent text-sm font-semibold mt-2
+           			border-gray-300 text-gray-500 opacity-40
+           			hover:border-gray-400 active:border-gray-500 ${disabledClass}"
+    				${isDisabled ? 'disabled' : ''}>
+    				💀 Skull King (+40)
+			</button>
                     </div>
                 `;
                 contenedor.appendChild(caja);
@@ -683,6 +761,14 @@
             
             btn.classList.toggle("opacity-60");
             btn.classList.toggle("opacity-100");
+	    btn.classList.toggle('opacity-40');
+	    btn.classList.toggle('text-gray-500');
+
+	    btn.classList.toggle('opacity-100');
+	    btn.classList.toggle('text-black-900');
+	    btn.classList.toggle('border-gray-300');
+	    btn.classList.toggle('border-gray-500');
+
             if (piratas[index]) {
                 const isSelected = btn.classList.contains("opacity-100");
                 piratas[index].skullSelected = isSelected;
@@ -888,21 +974,43 @@
 
         // --- Ranking ---
         function actualizarRankingParcial() {
-            const tbody = document.getElementById("tablaParcial");
-            tbody.innerHTML = "";
-            piratas.slice().sort((a, b) => b.puntos - a.puntos).forEach((p, i) => {
-                tbody.innerHTML += `
-                    <tr>
-                        <td class="px-2 py-1">${i+1}</td>
-                        <td class="px-2 py-1">${p.nombre}</td>
-                        <td class="px-2 py-1 text-right font-bold">${p.puntos}</td>
-                    </tr>
-                `;
-            });
-        }
+    const tbody = document.getElementById("tablaParcial");
+    tbody.innerHTML = "";
+
+    const ordenados = piratas.slice().sort((a, b) => b.puntos - a.puntos);
+
+    const liderBox = document.getElementById("lider-actual");
+    if (liderBox && ordenados.length > 0) {
+        const lider = ordenados[0];
+        liderBox.textContent = `🏴‍☠️ Pirata dominante: ${lider.nombre} (${lider.puntos})`;
+        liderBox.classList.remove("hidden");
+    }
+
+    ordenados.forEach((p, i) => {
+        let lugar = i + 1;
+        let icono = lugar;
+        let extraClase = "";
+
+        if (i === 0) {
+            icono = "🥇";
+            extraClase = "bg-[#fffaf0] border-y border-yellow-300";
+        } else if (i === 1) icono = "🥈";
+        else if (i === 2) icono = "🥉";
+
+        tbody.innerHTML += `
+            <tr class="${extraClase}">
+                <td class="px-2 py-1 text-center w-10">${icono}</td>
+                <td class="px-2 py-1">${p.nombre}</td>
+                <td class="px-2 py-1 text-right font-bold">${p.puntos}</td>
+            </tr>
+        `;
+    });
+}
+
 
         function mostrarRanking() {
             document.getElementById("pantalla-final").classList.remove("hidden");
+	    document.getElementById("btn-salir-header").classList.remove("hidden");
             const tbody = document.getElementById("tablaRanking");
             tbody.innerHTML = "";
             piratas.sort((a, b) => b.puntos - a.puntos).forEach((p, i) => {
@@ -922,6 +1030,7 @@
 
         // --- Reiniciar Juego ---
         function reiniciarJuego() {
+	    document.getElementById("btn-salir-header").classList.add("hidden");
             if (!confirm("¿Seguro que quieres salir y reiniciar el marcador?")) return;
 
             ronda = 1; fase = "apuesta"; modoActual = "skull";
@@ -949,7 +1058,6 @@
             if (pp) pp.classList.add("hidden");
             
             toggleRonShout(false); // Asegura que el grito RON esté oculto
-
             actualizarLista();
         }
         
