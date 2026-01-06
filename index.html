@@ -821,7 +821,10 @@
 
     if (!overlay || !texto) return;
 
-    texto.textContent = `RONDA ${ronda}`;
+   texto.textContent = (ronda === 10) 
+    ? "ÚLTIMA RONDA" 
+    : `RONDA ${ronda}`;
+
 
     overlay.classList.remove("hidden");
 
