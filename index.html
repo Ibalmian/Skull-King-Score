@@ -173,6 +173,14 @@
                 opacity: 0;pantalla 
             }
         }
+	
+	/* --- TRANSICIÓN CAMBIO DE RONDA --- */
+.ronda-visible {
+    opacity: 1 !important;
+    transform: scale(1) !important;
+}
+
+	
     </style>
 </head>
 <body class="min-h-screen flex flex-col items-center">
@@ -355,7 +363,20 @@
             </div>
         </div>
     </div>
+    
+    <!-- OVERLAY CAMBIO DE RONDA -->
+<div id="overlay-ronda"
+     class="hidden fixed inset-0 bg-black bg-opacity-80
+            flex items-center justify-center z-[950]">
+    <div id="texto-ronda"
+         class="text-yellow-400 text-7xl font-extrabold
+                opacity-0 scale-75
+                transition-all duration-700">
+        RONDA 1
+    </div>
+</div>
 
+    
     <div id="transicion-zarpar">
         <span class="shout-text text-8xl text-yellow-400 font-bold tracking-widest" style="display:none;">¡A ZARPAR!</span>
     </div>
@@ -793,7 +814,34 @@
                 if (b2) b2.classList.remove("hidden");
             });
         }
+	
+	function mostrarTransicionRonda() {
+    const overlay = document.getElementById("overlay-ronda");
+    const texto = document.getElementById("texto-ronda");
 
+    if (!overlay || !texto) return;
+
+    texto.textContent = `RONDA ${ronda}`;
+
+    overlay.classList.remove("hidden");
+
+    // Reset visual
+    texto.classList.remove("ronda-visible");
+
+    // Forzar repaint
+    void texto.offsetWidth;
+
+    // Animación de entrada
+    texto.classList.add("ronda-visible");
+
+    // Ocultar overlay después
+    setTimeout(() => {
+        overlay.classList.add("hidden");
+        texto.classList.remove("ronda-visible");
+    }, 900);
+}
+
+	
         // --- Fases de Juego ---
         function confirmarApuestas() {
             modoActual = document.querySelector('input[name="modo"]:checked')?.value || "skull";
@@ -944,6 +992,7 @@
             ronda++;
             fase = "apuesta";
             document.getElementById("ronda-actual").textContent = ronda;
+	    mostrarTransicionRonda();
 
             document.getElementById("btn-siguiente").classList.add("hidden");
             document.getElementById("btn-apuesta").classList.remove("hidden");
